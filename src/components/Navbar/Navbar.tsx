@@ -1,29 +1,44 @@
+import { Link, useLocation } from 'react-router-dom'
 import styles from './Navbar.module.scss'
 import logo from '@/assets/logo.svg'
 
 const Navbar: React.FC = () => {
+	const { pathname } = useLocation()
 	return (
 		<header className={styles['navbar-wrapper']}>
 			<div className={styles.navbar}>
 				<div className={styles.logo}>
 					<img src={logo} alt="logo" />
-					<a href="/">
+					<Link to="/">
 						<h1>Yike Design React</h1>
-					</a>
+					</Link>
 				</div>
 				<ul className={styles.nav}>
 					<li>
-						<a href="/module">组件</a>
+						<Link
+							to="/develop"
+							className={pathname.startsWith('/develop') ? styles['activated'] : ''}
+						>
+							开发
+						</Link>
 					</li>
 					<li>
-						<a href="http://www.huohuo90.com" target="_blank" rel="noreferrer">
+						<Link
+							to="/module"
+							className={pathname.startsWith('/module') ? styles['activated'] : ''}
+						>
+							组件
+						</Link>
+					</li>
+					<li>
+						<Link to="http://www.huohuo90.com" target="_blank">
 							主站
-						</a>
+						</Link>
 					</li>
 					<li>
-						<a href="https://github.com/itsatan/yike-design-react" target="_blank" rel="noreferrer">
+						<Link to="https://github.com/itsatan/yike-design-react" target="_blank">
 							Github
-						</a>
+						</Link>
 					</li>
 				</ul>
 			</div>

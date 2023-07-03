@@ -30,6 +30,11 @@
             a {
                 color: $font-color-l;
             }
+
+            .activated {
+                font-weight: 600;
+                color: $primary-color;
+            }
         }
     }
 }
