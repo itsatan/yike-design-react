@@ -1,0 +1,23 @@
+.home-wrapper {
+    display: flex;
+    justify-content: center;
+    height: calc(100vh - 60px);
+    background-color: $bg-color-l;
+
+    .container {
+        h1 {
+            padding: 30% 0 60px;
+            font-size: 68px;
+            font-weight: 600;
+            text-align: center;
+            line-height: 90px;
+            letter-spacing: 36px;
+        }
+
+        p {
+            font-size: $size-m;
+            font-weight: 700;
+            text-align: center;
+        }
+    }
+}
