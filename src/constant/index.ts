@@ -7,12 +7,12 @@ export const DEVELOP_NAVIGATOR_MENU_ITEM = [
 		title: '开发指南',
 	},
 	{
-		text: 'Yike Design React',
-		href: '/develop/description',
+		text: 'Yike Design',
+		href: '/develop/desc',
 	},
 	{
 		text: '快速上手',
-		href: '/quickly',
+		href: '/develop/quickly',
 	},
 ]
 

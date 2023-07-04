@@ -1,5 +1,7 @@
+import { Content } from '@/components'
+
 const Description: React.FC = () => {
-	return <div>Description</div>
+	return <Content>Description</Content>
 }
 
 export default Description

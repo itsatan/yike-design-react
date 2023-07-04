@@ -16,11 +16,10 @@ export type MenuItem = MenuItemWithTitle | MenuItemWithLink
 
 interface SidebarProps {
 	menu: Array<MenuItem>
-	activeMenuItem: string | null
 }
 
 const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
-	const { menu, activeMenuItem } = props
+	const { menu } = props
 	const { pathname } = useLocation()
 	return (
 		<div className={styles['sidebar-wrapper']}>
@@ -29,9 +28,7 @@ const Sidebar: React.FC<SidebarProps> = (props: SidebarProps) => {
 					{menu.map(item => {
 						const menuItemClassName = classes({
 							[styles['menu-item']]: true,
-							[styles['activated']]:
-								!!(item as MenuItemWithLink).href &&
-								(item as MenuItemWithLink).href === (activeMenuItem || pathname),
+							[styles['activated']]: (item as MenuItemWithLink).href === pathname,
 						})
 						if ('title' in item) {
 							const { key, title } = item

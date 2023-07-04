@@ -3,7 +3,7 @@ import { Navbar } from '@/components'
 
 const BaseLayout: React.FC = () => {
 	return (
-		<div>
+		<div style={{ paddingTop: 60 }}>
 			<Navbar />
 			<Outlet />
 		</div>

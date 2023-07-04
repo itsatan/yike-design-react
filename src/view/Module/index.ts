@@ -1,3 +1,5 @@
 import Button from './Button'
+import Icon from './Icon'
+import Typography from './Typography'
 
-export { Button }
+export { Button, Icon, Typography }

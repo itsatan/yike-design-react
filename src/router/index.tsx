@@ -1,6 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { BaseLayout, ChildrenLayout } from '@/layout'
-import { Home, Description, Button } from '@/view'
+import { Home, Description, Button, Quickly, Icon, Typography } from '@/view'
 
 const routers = createBrowserRouter([
 	{
@@ -16,8 +16,12 @@ const routers = createBrowserRouter([
 				element: <ChildrenLayout />,
 				children: [
 					{
-						path: 'description',
+						path: 'desc',
 						element: <Description />,
+					},
+					{
+						path: 'quickly',
+						element: <Quickly />,
 					},
 				],
 			},
@@ -28,6 +32,14 @@ const routers = createBrowserRouter([
 					{
 						path: 'button',
 						element: <Button />,
+					},
+					{
+						path: 'icon',
+						element: <Icon />,
+					},
+					{
+						path: 'typography',
+						element: <Typography />,
 					},
 				],
 			},

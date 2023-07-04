@@ -1,3 +1,4 @@
 import Description from './Description'
+import Quickly from './Quickly'
 
-export { Description }
+export { Description, Quickly }

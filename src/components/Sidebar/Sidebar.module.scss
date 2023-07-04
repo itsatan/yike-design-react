@@ -1,4 +1,8 @@
 .sidebar-wrapper {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    z-index: 999;
     overflow-y: scroll;
     border-right: 1px solid $line-color-s;
     min-width: 267px;

@@ -1,3 +1,10 @@
 .children-layout-wrapper {
     display: flex;
+    height: calc(100vh - 60px);
+
+    .children-layout-content {
+        margin-left: 267px;
+        height: auto;
+        flex: auto;
+    }
 }

@@ -1,5 +1,7 @@
+import { Content } from '@/components'
+
 const Button: React.FC = () => {
-	return <div>Button</div>
+	return <Content>Button</Content>
 }
 
 export default Button
