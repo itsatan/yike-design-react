@@ -1,11 +1,30 @@
 .sidebar-wrapper {
+    overflow-y: scroll;
     border-right: 1px solid $line-color-s;
-    padding: 8px 0;
     min-width: 267px;
     height: calc(100vh - 60px);
+    transition: background 0.3s;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    /* 滚动条里面小方块 */
+    &::-webkit-scrollbar-thumb {
+        border-radius: 4px;
+        background: transparent;
+    }
+
+    &:hover {
+        &::-webkit-scrollbar-thumb {
+            background: rgb(0 0 0 / 10%);
+        }
+    }
+
 
     .sidebar-content {
         margin: 0 16px;
+        padding: 10px 0 20px;
 
         .menu {
             .menu-title {
