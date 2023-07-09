@@ -1,7 +1,7 @@
 import { Content } from '@/components'
 
-const Typography: React.FC = () => {
-	return <Content>Typography</Content>
+const TypographyModule: React.FC = () => {
+	return <Content>TypographyModule</Content>
 }
 
-export default Typography
+export default TypographyModule

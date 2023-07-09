@@ -1,0 +1,55 @@
+h1.yike-typography {
+    font-size: 36px;
+    line-height: 1.23;
+}
+
+h2.yike-typography {
+    font-size: 32px;
+    line-height: 1.25;
+}
+
+h3.yike-typography {
+    font-size: 28px;
+    line-height: 1.29;
+}
+
+h4.yike-typography {
+    font-size: 24px;
+    line-height: 1.33;
+}
+
+h5.yike-typography {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+h6.yike-typography {
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+h1.yike-typography,
+h2.yike-typography,
+h3.yike-typography,
+h4.yike-typography,
+h5.yike-typography,
+h6.yike-typography {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    font-weight: 500;
+}
+
+.disabled {
+    color: rgb( 201 205 212 ) !important;
+    cursor: not-allowed !important;
+}
+
+.code {
+    margin: 0 2px;
+    border: 1px solid rgb( 229 230 235 );
+    border-radius: 2px;
+    padding: 2px 8px;
+    font-size: 85%;
+    color: rgb( 78 89 105 );
+    background-color: rgb( 242 243 245 );
+}

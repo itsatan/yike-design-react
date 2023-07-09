@@ -1,7 +1,7 @@
 import { Content } from '@/components'
 
-const Icon: React.FC = () => {
-	return <Content>Icon</Content>
+const IconModule: React.FC = () => {
+	return <Content>IconModule</Content>
 }
 
-export default Icon
+export default IconModule
