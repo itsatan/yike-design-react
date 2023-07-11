@@ -1,9 +1,9 @@
 import * as React from 'react'
 import classNames from 'classnames'
-import { TitleProps } from './interface'
+import { TypographyTitleProps } from './interface'
 import { useGenChildren } from './hooks'
 
-const Title: React.FC<TitleProps> = props => {
+const Title: React.FC<TypographyTitleProps> = props => {
 	const {
 		type = '',
 		level = 1,

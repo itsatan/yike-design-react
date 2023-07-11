@@ -1,6 +1,13 @@
 import { Content, ComponentViewTitle, ComponentViewCard } from '@/components'
 import { Typography } from '../../../../yike-design'
-const { Title } = Typography
+import React from 'react'
+const { Title, Text } = Typography
+
+const TextMap = (props: { children: React.ReactNode }) => {
+	return React.Children.map(props.children, child => {
+		return <div style={{ marginBottom: 10 }}>{child}</div>
+	})
+}
 
 const TypographyModule: React.FC = () => {
 	return (
@@ -36,6 +43,22 @@ const TypographyModule: React.FC = () => {
 				<Title level={5} type="danger">
 					Yike Design React - danger
 				</Title>
+			</ComponentViewCard>
+			<ComponentViewCard title="文本" desc="不同样式的文本以及超链接组件。">
+				<TextMap>
+					<Text>Default</Text>
+					<Text type="primary">Primary</Text>
+					<Text type="secondary">Secondary</Text>
+					<Text type="success">Success</Text>
+					<Text type="warning">Warning</Text>
+					<Text type="danger">Danger</Text>
+					<Text strong>Strong</Text>
+					<Text disabled>Disabled</Text>
+					<Text mark>Mark</Text>
+					<Text underline>Underline</Text>
+					<Text delete>Delete</Text>
+					<Text code>Hello World</Text>
+				</TextMap>
 			</ComponentViewCard>
 		</Content>
 	)

@@ -1,12 +1,8 @@
 export type TYPOGRAPHY_TYPE = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'danger'
 
-export const TITLE_ELE_LEVEL = [1, 2, 3, 4, 5, 6] as const
-
-export interface TitleProps {
+export interface TypographyCommonProps {
 	/** 文本类型 */
 	type?: TYPOGRAPHY_TYPE
-	/** 标题级别 */
-	level?: (typeof TITLE_ELE_LEVEL)[number]
 	/** 代码块 */
 	code?: boolean
 	/** 下划线 */
@@ -32,3 +28,17 @@ export interface TitleProps {
 	/** Children */
 	children?: React.ReactNode
 }
+
+/**
+ * @title Typography.Title
+ */
+export const TYPOGRAPHY_TITLE_LEVEL = [1, 2, 3, 4, 5, 6] as const
+export interface TypographyTitleProps extends TypographyCommonProps {
+	/** 标题级别 */
+	level?: (typeof TYPOGRAPHY_TITLE_LEVEL)[number]
+}
+
+/**
+ * @title Typography.Text
+ */
+export type TypographyTextProps = TypographyCommonProps
