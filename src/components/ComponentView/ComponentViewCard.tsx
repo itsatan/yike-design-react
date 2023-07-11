@@ -12,7 +12,7 @@ const ComponentViewCard: React.FC<ComponentViewCardProps> = (props: ComponentVie
 	return (
 		<div className={c['component-view-card-wrapper']}>
 			<h2>{title}</h2>
-			{desc && <p>{desc}</p>}
+			{desc && <p className="desc">{desc}</p>}
 			<div className={c['component-view-card-content']}>{children}</div>
 		</div>
 	)

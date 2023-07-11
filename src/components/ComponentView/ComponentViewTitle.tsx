@@ -10,7 +10,7 @@ const ComponentViewTitle: React.FC<ComponentViewTitleProps> = (props: ComponentV
 	return (
 		<div className={c['component-view-title-wrapper']}>
 			<h1>{title}</h1>
-			{desc && <p>{desc}</p>}
+			{desc && <p className="desc">{desc}</p>}
 		</div>
 	)
 }

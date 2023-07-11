@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { TitleProps } from '../interface'
+import { TypographyTitleProps } from '../interface'
 
-const useGenChildren = <T extends TitleProps>(props: T) => {
+const useGenChildren = <T extends TypographyTitleProps>(props: T) => {
 	function genChildren(
 		{ strong, underline, delete: del, code, mark, italic }: T,
 		children: React.ReactNode

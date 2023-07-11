@@ -8,21 +8,21 @@
         line-height: 1.28;
     }
 
-    p {
+    .desc {
         color: $secondary-color;
     }
 }
 
 .component-view-card-wrapper {
     margin-top: 55px;
-    max-width: 800px;
+    max-width: 1000px;
 
     h2 {
         margin-bottom: 12px;
         font-size: 20px;
     }
 
-    p {
+    .desc {
         color: $secondary-color;
     }
 

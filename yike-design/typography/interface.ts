@@ -42,3 +42,26 @@ export interface TypographyTitleProps extends TypographyCommonProps {
  * @title Typography.Text
  */
 export type TypographyTextProps = TypographyCommonProps
+
+/**
+ * @title Typography.Paragraph
+ */
+export type TYPOGRAPHY_PARAGRAPH_SPACING = 'default' | 'close'
+export interface TypographyParagraphProps extends TypographyCommonProps {
+	/** 长引用 */
+	blockquote?: boolean
+	/** 行高 */
+	spacing?: TYPOGRAPHY_PARAGRAPH_SPACING
+}
+
+/**
+ * @title Typography
+ */
+export interface TypographyProps {
+	/** 节点样式 */
+	style?: React.CSSProperties
+	/** className */
+	className?: string
+	/** Children */
+	children?: React.ReactNode
+}
