@@ -1,0 +1,23 @@
+@import "variables";
+
+:root {
+  --primary-color: #{$primary-color};
+  --link-color: #{$link-color};
+  --success-color: #{$success-color};
+  --warning-color: #{$warning-color};
+  --danger-color: #{$error-color};
+
+  --grey-1: #1e2025;
+  --grey-2: #4b4d50;
+  --grey-3: #8e8f91;
+  --grey-4: #9ea2ab;
+  --grey-5: #d1d1d2;
+  --grey-6: #e8e8e8;
+  // --grey-7: (missing)
+  --grey-8: #f3f3f4;
+  --grey-9: #f6f6f8;
+  --grey-9: #1e2025;
+  --grey-10: #fff;
+
+  --line-height: 1.2;
+}

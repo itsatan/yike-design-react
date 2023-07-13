@@ -2,12 +2,16 @@
     "name": "yike-design-react",
     "private": true,
     "version": "0.0.0",
+    "type": "module",
     "scripts": {
-        "dev": "vite",
-        "build": "tsc && vite build",
-        "lint": "eslint 'src/**/*.+(js|ts|jsx|tsx)' ",
-        "format": "prettier --write 'src/**/*.+(js|ts|jsx|tsx)'",
-        "preview": "vite preview"
+        "prepare": "husky install",
+        "dev:demo": "concurrently -n \"DEMO,TYPES\" -- \"pnpm --filter demo dev\" \"pnpm --filter @yike-design/react watch:types\"",
+        "build:demo": "pnpm --filter @yike-design/react build:types && pnpm --filter demo build",
+        "preview:demo": "pnpm --filter @yike-design/react build:types && pnpm --filter demo preview",
+        "lint:ts": "eslint .",
+        "lint": "pnpm run lint:ts",
+        "format:ts": "eslint --fix .",
+        "format": "pnpm run format:ts"
     },
     "dependencies": {
         "classnames": "^2.3.2",
@@ -18,19 +22,22 @@
     "devDependencies": {
         "@commitlint/cli": "^17.6.6",
         "@commitlint/config-conventional": "^17.6.6",
+        "@types/inquirer": "^9.0.3",
         "@types/node": "^20.3.3",
         "@types/react": "^18.0.37",
         "@types/react-dom": "^18.0.11",
         "@typescript-eslint/eslint-plugin": "^5.59.0",
         "@typescript-eslint/parser": "^5.59.0",
         "@vitejs/plugin-react": "^4.0.0",
+        "concurrently": "^8.2.0",
         "eslint": "^8.38.0",
         "eslint-config-prettier": "^8.8.0",
         "eslint-plugin-prettier": "^4.2.1",
         "eslint-plugin-react": "^7.32.2",
         "eslint-plugin-react-hooks": "^4.6.0",
         "eslint-plugin-react-refresh": "^0.3.4",
-        "husky": "^8.0.3",
+        "husky": "^8.0.0",
+        "inquirer": "^9.2.8",
         "postcss-sass": "^0.5.0",
         "prettier": "^2.8.8",
         "sass": "^1.63.6",
@@ -39,5 +46,10 @@
         "stylelint-order": "^6.0.3",
         "typescript": "^5.0.2",
         "vite": "^4.3.9"
+    },
+    "husky": {
+        "hooks": {
+            "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+        }
     }
 }

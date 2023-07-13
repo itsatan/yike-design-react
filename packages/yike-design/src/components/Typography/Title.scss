@@ -1,0 +1,23 @@
+@use "sass:list";
+@use "sass:map";
+
+$headings: (
+  36px,
+  32px,
+  28px,
+  24px,
+  20px,
+  16px,
+);
+
+@for $i from 0 to list.length($headings) {
+  $headingFontSize: list.nth($headings, $i + 1);
+
+  h#{$i + 1}.yk-typography {
+    font-size: $headingFontSize;
+    line-height: 1.4;
+    font-weight: 500;
+    margin-top: 0;
+    margin-bottom: .5em;
+  }
+}
