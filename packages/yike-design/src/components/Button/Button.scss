@@ -1,0 +1,245 @@
+@use "sass:color";
+@use "sass:list";
+@use "sass:map";
+@use "sass:math";
+@use "sass:meta";
+
+@use "../../styles/variables";
+
+@function get-color($status: "primary") {
+  @return map.get(meta.module-variables("variables"), "#{$status}-color");
+}
+
+@mixin btn-focus-ring-variant($color) {
+  box-shadow: 0 0 0 .25em if(color.lightness($color) < 66%, color.mix($color, #fff), darken($color, 10%));
+}
+
+@mixin btn-color-variant($normal, $hover: $normal, $active: $normal, $focus-ring: $normal, $disabled: false) {
+  @if $normal {
+    border-color: $normal;
+    background-color: $normal;
+  }
+
+  @if not $disabled {
+    &:hover {
+      border-color: $hover;
+      background-color: $hover;
+    }
+
+    &:focus-visible {
+      z-index: 1;
+      @include btn-focus-ring-variant($focus-ring);
+    }
+
+    &:active {
+      border-color: $active;
+      background-color: $active;
+    }
+  }
+}
+
+$btn-size: (
+  "s",
+  /* "m", // implicit */
+  "l"
+);
+
+$btn-status: (
+  "success": "success",
+  "warning": "warning",
+  "danger": "error",
+);
+
+$btn-height: (
+  s: 32px,
+  m: 40px,
+  l: 48px,
+);
+
+$btn-padding: (
+  s: 16px,
+  m: 16px,
+  l: 24px,
+);
+$btn-border-radius: (
+  s: 4px,
+  m: 8px,
+  l: 8px,
+);
+$btn-font-size: (
+  s: 12px,
+  m: 14px,
+  l: 16px,
+);
+
+$prefix: "yk-btn";
+
+.#{$prefix} {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: map.get($btn-height, "m");
+
+  outline: 0;
+
+  padding-left: map.get($btn-padding, "m");
+  padding-right: map.get($btn-padding, "m");
+
+  border: 1px solid transparent;
+  border-radius: map.get($btn-border-radius, "m");
+
+  line-height: 1.2;
+
+  cursor: pointer;
+  user-select: none;
+
+  color: #fff;
+  transition: all 100ms ease-in-out;
+  @include btn-color-variant(get-color(), color.mix(get-color(), #fff, 85%));
+
+  &[disabled] {
+    @include btn-color-variant(color.mix(get-color(), #fff, 60.24%), $disabled: true);
+
+    cursor: not-allowed;
+  }
+
+  // --- STATUS
+  @each $name, $colorKey in $btn-status {
+    $statusColor: get-color($colorKey);
+    $statusColorDisabled: color.mix($statusColor, #fff, 60.24%);
+    $statusSecondaryColor: color.mix(get-color($colorKey), #fff, 20.24%);
+
+    &#{&}--status-#{$name} {
+      @include btn-color-variant($statusColor, color.mix($statusColor, #fff, 85%));
+
+      &[disabled] {
+        @include btn-color-variant($statusColorDisabled, $disabled: true);
+      }
+    }
+
+    &#{&}--status-#{$name}#{&}--secondary {
+      color: $statusColor;
+      @include btn-color-variant($statusSecondaryColor, color.adjust($statusSecondaryColor, $lightness: -7.5%), $focus-ring: $statusColor);
+
+      &[disabled] {
+        color: color.mix($statusColor, #fff, 60.24%);
+
+        @include btn-color-variant($statusSecondaryColor, $disabled: true);
+      }
+    }
+
+    &#{&}--status-#{$name}#{&}--outline {
+      color: $statusColor;
+
+      @include btn-color-variant($statusColor, color.mix($statusColor, #fff, 65%), $focus-ring: $statusColor);
+
+      &:hover {
+        color: color.mix($statusColor, #fff, 65%);
+      }
+
+      &:active {
+        color: $statusColor;
+      }
+
+      &[disabled] {
+        color: $statusColorDisabled;
+
+        @include btn-color-variant($statusColorDisabled, $disabled: true);
+      }
+    }
+
+    &#{&}--status-#{$name}#{&}--ghost {
+      color: $statusColor;
+
+      &:focus-visible {
+        @include btn-focus-ring-variant($statusColor);
+      }
+
+      &[disabled] {
+        color: $statusColorDisabled;
+
+        @include btn-color-variant(transparent, $disabled: true);
+      }
+    }
+  }
+
+  // --- TYPE
+  &#{&}--secondary {
+    color: var(--grey-1);
+    @include btn-color-variant(#f3f3f4, #e8e8e8, $focus-ring: #d1d1d2);
+
+    &[disabled] {
+      color: var(--grey-4);
+      @include btn-color-variant(color.mix(#f3f3f4, #fff, 60.03%), $disabled: true);
+    }
+  }
+
+  &#{&}--outline {
+    @include btn-color-variant(#d1d1d2, #9ea2ab);
+
+    color: var(--grey-1);
+    background-color: transparent !important;
+
+    &[disabled] {
+      color: var(--grey-4);
+      @include btn-color-variant(color.mix(#d1d1d2, #fff, 60.03%), $disabled: true);
+    }
+  }
+
+  &#{&}--ghost {
+    color: var(--primary-color);
+
+    @include btn-color-variant(transparent, #f3f3f4, #e8e8e8, #d1d1d2);
+
+    &[disabled] {
+      color: color.mix(get-color(), #fff, 60.24%);
+      @include btn-color-variant(transparent, $disabled: true);
+    }
+  }
+
+  // --- SHAPE
+  &#{&}--shape-rounded {
+    border-radius: 20px !important;
+  }
+
+  &#{&}--shape-circle {
+    padding: 0;
+    width: 40px;
+    border-radius: 50%;
+  }
+
+  // --- BLOCK
+  &#{&}--block {
+    display: flex;
+    width: 100%;
+  }
+
+  // --- SIZE
+  @each $size in $btn-size {
+    &#{&}--size-#{$size} {
+      height: map.get($btn-height, $size);
+      padding-left: map.get($btn-padding, $size);
+      padding-right: map.get($btn-padding, $size);
+      font-size: map.get($btn-font-size, $size);
+      border-radius: map.get($btn-border-radius, $size);
+    }
+
+    // --- SHAPES ---
+    // some properties are tied up with sizes
+    &#{&}--size-#{$size}#{&}--shape-rounded {
+      border-radius: math.div(map.get($btn-height, $size), 2) !important;
+    }
+
+    &#{&}--size-#{$size}#{&}--shape-circle {
+      width: map.get($btn-height, $size);
+    }
+  }
+
+  // --- LOADING
+  &#{&}--loading {
+    cursor: default;
+  }
+}
