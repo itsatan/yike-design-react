@@ -600,7 +600,7 @@ const ax = axios.create({ baseURL: '/api' });
 ```
 ~~~
 
-> ⚠️ 请自行保证导入名和变量名在整篇文档中的唯一性
+> ⚠️ 每个文档内只有第一个 [pre] 代码块生效，其余的将会被移除。请自行保证导入名和变量名在整篇文档中的唯一性
 
 
 #### 文档分割
@@ -610,6 +610,16 @@ const ax = axios.create({ baseURL: '/api' });
 ~~~md
 ```docref ./ButtonExample1.md
 ```
+~~~
+
+基本等效于使用 `[pre]` 代码块并在文档中直接写 JSX 代码
+
+~~~md
+```tsx [pre]
+import ButtonExample1 from './ButtonExample1.md';
+```
+
+<ButtonExample1 />
 ~~~
 
 

@@ -88,7 +88,10 @@ const MarkdownPlugin = (): vite.PluginOption => ({
         `import { ${SiteComponents.join(', ')} } from '@/components';`,
       ]);
 
-      let precode = '';
+      const injections = {
+        pre: '',
+      };
+
       const components: string[] = [];
 
       const tokens = md.parse(fileContent, null);
@@ -133,9 +136,9 @@ const MarkdownPlugin = (): vite.PluginOption => ({
 
             // Typescript React
             // ```tsx
-            if (tokenInfo.startsWith('tsx')) {
+            if (/^tsx/i.test(tokenInfo)) {
               // ```tsx [pre]
-              if (tokenInfo.includes('[pre]')) {
+              if (/\[pre\]/i.test(tokenInfo) && !injections.pre) {
                 let importLocs: [number, number][] = [];
 
                 ts.transpileModule(token.content, {
@@ -144,9 +147,10 @@ const MarkdownPlugin = (): vite.PluginOption => ({
                     before: [
                       () => ({
                         transformSourceFile: (file) => {
-                          importLocs = file.statements
-                            .filter(ts.isImportDeclaration)
-                            .map((stmt) => [stmt.getStart(), stmt.getEnd()]);
+                          importLocs = file.statements.filter(ts.isImportDeclaration).map((stmt) => {
+                            imports.add(stmt.getText());
+                            return [stmt.getStart(), stmt.getEnd()];
+                          });
 
                           return file;
                         },
@@ -156,7 +160,7 @@ const MarkdownPlugin = (): vite.PluginOption => ({
                   },
                 });
 
-                precode = importLocs
+                injections.pre = importLocs
                   .reverse()
                   .reduce((p, [s, e]) => `${p.slice(0, s)}${p.slice(e)}`, token.content)
                   .trim();
@@ -173,11 +177,11 @@ const MarkdownPlugin = (): vite.PluginOption => ({
               ];
 
               // ```tsx [demo]
-              if (tokenInfo.includes('[demo]')) {
+              if (/\[demo\]/i.test(tokenInfo)) {
                 let content = token.content;
 
                 // ```tsx [demo][name=Name]
-                const componentNameMatch = token.info.match(/\[(?:name) *(?:= *(?<name>.+))?\]/i);
+                const componentNameMatch = token.info.match(/\[(?:name) *(?:= *(?<name>[^[\]]+))?\]/i);
 
                 if (componentNameMatch) {
                   const C = componentNameMatch.groups!.name;
@@ -202,7 +206,7 @@ const MarkdownPlugin = (): vite.PluginOption => ({
             // Refrence other docs
             // ```docref ./OtherDoc.md
             // ```
-            if (tokenInfo.startsWith('docref ')) {
+            if (/^docref /i.test(tokenInfo)) {
               const refPath = token.info.slice(7).trim();
 
               if (!refPath) {
@@ -230,7 +234,7 @@ const MarkdownPlugin = (): vite.PluginOption => ({
       const result = fixSourceMapping(
         ts.transpileModule(
           [
-            precode,
+            injections.pre,
             ...components,
             `const ${componentName} = () => (<>${document}</>)`,
             `export default ${componentName}`,
