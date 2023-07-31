@@ -9,7 +9,7 @@ a {
     color: $link-color;
 }
 
-ul,li {
+ul, li {
     list-style: none;
 }
 
@@ -20,5 +20,5 @@ body {
         Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
     color: $font-color-l;
     background: $bg-color-l;
-    line-height: 20px;
+    line-height: 1.4;
 }

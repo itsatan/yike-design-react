@@ -1,0 +1,25 @@
+.codebox {
+  border: 1px solid #E8E8E8;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  max-width: calc(100vw - 46rem);
+  // min-width: 40rem;
+  overflow: hidden;
+
+  &-example {
+    padding: 1rem 1.5rem;
+  }
+
+  &-code {
+    border-top: 1px solid #E8E8E8;
+    overflow: auto;
+
+    > div {
+      display: flex;
+
+      > pre {
+        padding: 1rem 1.25rem;
+      }
+    }
+  }
+}

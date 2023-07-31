@@ -10,6 +10,8 @@ import hljs from 'highlight.js';
 import * as vite from 'vite';
 import ts from 'typescript';
 
+const ident = <T>(_: T) => _;
+
 // SiteCopmonents iife
 const SiteComponents = (() => {
   let r = [];
@@ -19,13 +21,11 @@ const SiteComponents = (() => {
     compilerOptions: { noEmit: true },
     transformers: {
       before: [
-        () => {
-          return {
-            // @ts-ignore
-            transformSourceFile: (file) => ((r = [...file.classifiableNames]), file),
-            transformBundle: (bundle) => bundle,
-          };
-        },
+        () => ({
+          // @ts-ignore
+          transformSourceFile: (file) => ((r = [...file.classifiableNames]), file),
+          transformBundle: ident,
+        }),
       ],
     },
   });
@@ -46,6 +46,14 @@ const fixSourceMapping = (data: ts.TranspileOutput, parsedPath: path.ParsedPath)
     outputText,
     sourceMapText: sourceMapJson && JSON.stringify(sourceMapJson),
   });
+};
+
+const tsConfig = ts.readConfigFile(path.resolve(__dirname, '../tsconfig.json'), (p) => fs.readFileSync(p).toString());
+const compilerOptions = {
+  ...(tsConfig.config?.compilerOptions ?? {}),
+  jsx: ts.JsxEmit.ReactJSX,
+  module: ts.ModuleKind.ESNext,
+  noEmit: true,
 };
 
 const MarkdownPlugin = (): vite.PluginOption => ({
@@ -75,11 +83,12 @@ const MarkdownPlugin = (): vite.PluginOption => ({
       // Predefined imports
       const imports: Set<string> = new Set([
         `import React from 'react';`,
+        `import classNames from 'classnames';`,
         `import Yk from '@yike-design/react/src';`,
         `import { ${SiteComponents.join(', ')} } from '@/components';`,
       ]);
 
-      const definitions: string[] = [];
+      let precode = '';
       const components: string[] = [];
 
       const tokens = md.parse(fileContent, null);
@@ -122,24 +131,40 @@ const MarkdownPlugin = (): vite.PluginOption => ({
           if (token.type === 'fence' && token.tag === 'code') {
             const tokenInfo = token.info.toLowerCase();
 
-            // Extra imports
-            // ```import
-            // ```imports
-            if (tokenInfo === 'import' || tokenInfo === 'imports') {
-              imports.add(token.content);
-              return;
-            }
-
             // Typescript React
             // ```tsx
             if (tokenInfo.startsWith('tsx')) {
-              // ```tsx [define]
-              if (tokenInfo.includes('[define]')) {
-                definitions.push(token.content);
+              // ```tsx [pre]
+              if (tokenInfo.includes('[pre]')) {
+                let importLocs: [number, number][] = [];
+
+                ts.transpileModule(token.content, {
+                  compilerOptions,
+                  transformers: {
+                    before: [
+                      () => ({
+                        transformSourceFile: (file) => {
+                          importLocs = file.statements
+                            .filter(ts.isImportDeclaration)
+                            .map((stmt) => [stmt.getStart(), stmt.getEnd()]);
+
+                          return file;
+                        },
+                        transformBundle: ident,
+                      }),
+                    ],
+                  },
+                });
+
+                precode = importLocs
+                  .reverse()
+                  .reduce((p, [s, e]) => `${p.slice(0, s)}${p.slice(e)}`, token.content)
+                  .trim();
+
                 return;
               }
 
-              const result = [
+              let result = [
                 Object.assign(new Token('html_block', '', 0), {
                   content: `<div dangerouslySetInnerHTML={{ __html: ${JSON.stringify(
                     md.renderer.render([token], md.options, {})
@@ -151,9 +176,8 @@ const MarkdownPlugin = (): vite.PluginOption => ({
               if (tokenInfo.includes('[demo]')) {
                 let content = token.content;
 
-                // ```tsx [demo][comp=Name]
-                // ```tsx [demo][component=Name]
-                const componentNameMatch = token.info.match(/\[(?:comp(?:onent)?|) *(?:= *(?<name>.+))?\]/i);
+                // ```tsx [demo][name=Name]
+                const componentNameMatch = token.info.match(/\[(?:name) *(?:= *(?<name>.+))?\]/i);
 
                 if (componentNameMatch) {
                   const C = componentNameMatch.groups!.name;
@@ -161,29 +185,29 @@ const MarkdownPlugin = (): vite.PluginOption => ({
                   content = `<${C} />`;
                 }
 
-                // Wrap in a ComponentViewCard
-                // ```tsx [demo][card]
-                if (tokenInfo.includes('[card]')) {
-                  content = `<ComponentViewCard>${content}</ComponentViewCard>`;
-                }
+                content = `<Codebox example={<>${content.trim()}</>}>${result[0].content}</Codebox>`;
 
                 token.info = 'tsx';
 
-                result.unshift(
+                result = [
                   Object.assign(new Token('html_block', '', 0), {
                     content,
-                  })
-                );
+                  }),
+                ];
               }
 
               return result;
             }
 
             // Refrence other docs
-            // ```docref=./DOtherDoc
+            // ```docref ./OtherDoc.md
             // ```
-            if (tokenInfo.startsWith('docref')) {
-              const refPath = (token.info.split('=')[1] || token.content).trim();
+            if (tokenInfo.startsWith('docref ')) {
+              const refPath = token.info.slice(7).trim();
+
+              if (!refPath) {
+                throw new SyntaxError(`Language 'docref' must followed by a file path`);
+              }
 
               if (refPath) {
                 const parsedRefPath = path.parse(refPath);
@@ -203,25 +227,16 @@ const MarkdownPlugin = (): vite.PluginOption => ({
         .map((token) => (token ? md.renderer.render([token], md.options, {}) : ''))
         .join('');
 
-      const tsConfig = ts.readConfigFile(path.resolve(__dirname, '../tsconfig.json'), (p) =>
-        fs.readFileSync(p).toString()
-      );
-
       const result = fixSourceMapping(
         ts.transpileModule(
           [
-            ...definitions,
+            precode,
             ...components,
             `const ${componentName} = () => (<>${document}</>)`,
             `export default ${componentName}`,
           ].join('\n'),
           {
-            compilerOptions: {
-              ...(tsConfig.config?.compilerOptions ?? {}),
-              jsx: ts.JsxEmit.ReactJSX,
-              module: ts.ModuleKind.ESNext,
-              noEmit: true,
-            },
+            compilerOptions,
           }
         ),
         parsedPath
