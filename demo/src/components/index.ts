@@ -1,7 +1,6 @@
 import Navbar from './Navbar/Navbar';
 import Sidebar from './Sidebar/Sidebar';
 import Content from './Content/Content';
-import { ComponentViewTitle } from './ComponentView';
-import { ComponentViewCard } from './ComponentView';
+import Codebox from './Codebox';
 
-export { Navbar, Sidebar, Content, ComponentViewTitle, ComponentViewCard };
+export { Codebox, Navbar, Sidebar, Content };
